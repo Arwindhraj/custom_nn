@@ -1,0 +1,9 @@
+CSP Bottleneck
+https://github.com/WongKinYiu/CrossStagePartialNetworks
+
+Floating Point
+https://docs.nvidia.com/cuda/floating-point/index.html
+https://github.com/jafingerhut/p4-guide/blob/master/docs/floating-point-operations.md
+
+TensorRT
+https://medium.com/@abhaychaturvedi_72055/understanding-nvidias-tensorrt-for-deep-learning-model-optimization-dad3eb6b26d9
