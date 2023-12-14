@@ -7,3 +7,13 @@ https://github.com/jafingerhut/p4-guide/blob/master/docs/floating-point-operatio
 
 TensorRT
 https://medium.com/@abhaychaturvedi_72055/understanding-nvidias-tensorrt-for-deep-learning-model-optimization-dad3eb6b26d9
+
+vision-transformer-from-scratch
+https://github.com/tintn/vision-transformer-from-scratch
+
+Swin transformer 
+https://youtu.be/SndHALawoag?si=5k-20T68KNn0o1YK
+https://youtu.be/qUSPbHE3OeU?si=DK9V3inBgaPROrkS
+
+nn in pytorch
+https://youtu.be/mozBidd58VQ?si=gIQwjTIhCgLFJBTO
