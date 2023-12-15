@@ -17,3 +17,4 @@ https://youtu.be/qUSPbHE3OeU?si=DK9V3inBgaPROrkS
 
 nn in pytorch
 https://youtu.be/mozBidd58VQ?si=gIQwjTIhCgLFJBTO
+

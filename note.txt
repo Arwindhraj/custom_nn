@@ -1,0 +1,100 @@
+| Model               | Typical Layers                                            | Notable Features                              |
+|---------------------|----------------------------------------------------------|-----------------------------------------------|
+| CNN                 | Convolutional Layers, Pooling Layers, Fully Connected Layers | Basic convolutional neural network            |
+| ResNet-18           | Convolutional Layers, Residual Blocks, Fully Connected Layers | Skip connections, 18 layers                  |
+| ResNet-34           | Convolutional Layers, Residual Blocks, Fully Connected Layers | Skip connections, 34 layers                  |
+| ResNet-50           | Convolutional Layers, Residual Blocks, Fully Connected Layers | Skip connections, 50 layers                  |
+| ResNet-101          | Convolutional Layers, Residual Blocks, Fully Connected Layers | Skip connections, 101 layers                 |
+| ResNet-152          | Convolutional Layers, Residual Blocks, Fully Connected Layers | Skip connections, 152 layers                 |
+| Darknet-53          | Convolutional Layers, Darknet Blocks, Global Average Pooling | 53-layer variant of the Darknet architecture |
+| YOLOv1 (Darknet-19) | Convolutional Layers, Darknet Blocks, Global Average Pooling | Original YOLO with 19-layer architecture    |
+| YOLOv2 (YOLO9000)  | Convolutional Layers, Darknet Blocks, Global Average Pooling | Improved YOLO with 19-layer architecture    |
+| YOLOv3              | Convolutional Layers, Darknet Blocks, Global Average Pooling | Enhanced YOLO with 53-layer architecture    |
+| RCNN                | Convolutional Layers, Region Proposal Networks, Fully Connected Layers | Region-based CNN                             |
+| Faster RCNN         | Convolutional Layers, Region Proposal Networks, Fully Connected Layers | Region-based CNN with improved speed         |
+| Fast RCNN           | Convolutional Layers, Region Proposal Networks, Fully Connected Layers | Region-based CNN with VGG backbone           |
+| SSD                 | Convolutional Layers, Inception Blocks, Detection Heads   | Single Shot Multibox Detector                |
+| DETR                | Transformer Encoder Layers, Positional Encodings, Feedforward Layers | Object detection using transformers         |
+| VGGv1               | Convolutional Layers, Pooling Layers, Fully Connected Layers | Original VGG with 11-19 layers               |
+| VGGv2               | Convolutional Layers, Pooling Layers, Fully Connected Layers | Extended VGG architecture                    |
+| VGGv3               | Convolutional Layers, Pooling Layers, Fully Connected Layers | Further extensions to VGG                   |
+| MobileNetv1         | Depthwise Separable Convolution, Pointwise Convolution, Fully Connected Layers | Lightweight architecture for mobile devices |
+| MobileNetv2         | Inverted Residual Blocks, Depthwise Separable Convolution, Fully Connected Layers | Improved version of MobileNet               |
+| MobileNetv3         | Inverted Residual Blocks, Depthwise Separable Convolution, Fully Connected Layers | Further improvements in MobileNet           |
+
+#####################################
+
+
+### Residual Blocks:
+
+| Layer Type            | Description                                          |
+|-----------------------|------------------------------------------------------|
+| Convolution           | Basic convolution operation.                         |
+| Batch Normalization   | Normalizes activations to improve training stability.|
+| ReLU Activation       | Rectified Linear Unit activation function.           |
+| Residual Connection   | Skip connection to add the original input to the output.|
+| Identity Mapping      | The residual connection enables identity mapping.    |
+
+### Darknet Blocks:
+
+| Layer Type               | Description                                                  |
+|--------------------------|--------------------------------------------------------------|
+| Conv                     | Basic convolution operation.                                  |
+| SiLu                     | Sine Linear Unit (SiLu) activation.                          |
+| Depthwise Convolution    | Depthwise separable convolution for spatial feature extraction.|
+| Depthwise Transpose Convolution | Depthwise separable transposed convolution.             |
+| Transformer Layer        | Self-attention mechanism for capturing long-range dependencies.|
+| Transformer Block        | A block containing multiple transformer layers.              |
+| Bottleneck               | A standard bottleneck layer with Conv, BN, and SiLu.         |
+| Bottleneck CSP           | Bottleneck with additional CSP (Cross-Stage Partial) connection.|
+| Cross Convolution Downsample | Downsample using cross-convolution operation.            |
+| CSP Bottleneck with 3 Convolution | Bottleneck with three consecutive convolution layers.|
+| C3 Module with Cross-Convolution | A module with cross-convolutions for feature extraction.   |
+| C3 Module with TransformerBlock() | A module with a transformer block for capturing dependencies.|
+| C3 Module with SPP()     | A module with Spatial Pyramid Pooling (SPP) for multiscale feature representation.|
+| C3 Module with GhostBottleneck() | A module with a GhostBottleneck for reduced computation.|
+| Spatial Pyramid Pooling (SPP) layer | Extracts features at multiple scales for robustness.       |
+| Spatial Pyramid Pooling - Fast (SPPF) layer | Fast version of Spatial Pyramid Pooling.              |
+| Ghost Convolution        | A lightweight convolution operation.                         |
+| Ghost Bottleneck         | A lightweight bottleneck layer for reduced computation.     |
+
+### Region Proposal Network (RPN):
+
+| Layer Type               | Description                                                  |
+|--------------------------|--------------------------------------------------------------|
+| Anchor Boxes             | Predefined boxes of different scales and ratios used to propose regions.|
+| Convolution              | Convolutional layer for feature extraction.                  |
+| ReLU Activation          | Rectified Linear Unit activation function.                   |
+| Regression Head          | Predicts bounding box offsets for each anchor box.            |
+| Classification Head      | Predicts whether an object is present in each anchor box.    |
+| Region Proposals         | Selects top N region proposals based on scores.              |
+| Non-Maximum Suppression  | Removes duplicate and low-confidence region proposals.       |
+
+
+#################################
+
+
+Custom Single-Class Object Detection Architecture:
+
+Input Image
+|
+|-- Convolutional Layer (e.g., 64 filters, kernel size 3x3, stride 1)
+|-- Batch Normalization
+|-- ReLU Activation
+|-- Darknet Block
+|   |-- Convolutional Layer (128 filters, kernel size 3x3, stride 1)
+|   |-- SiLu Activation
+|   |-- Depthwise Convolution (128 filters, kernel size 3x3, stride 1)
+|   |-- Batch Normalization
+|   |-- ReLU Activation
+|   |-- Depthwise Transpose Convolution (128 filters, kernel size 3x3, stride 1)
+|   |-- Bottleneck or Transformer Block (choose based on performance)
+|
+|-- Convolutional Layer (256 filters, kernel size 3x3, stride 1)
+|-- Batch Normalization
+|-- ReLU Activation
+|-- Convolutional Layer (4 boxes * 4 coordinates, kernel size 1x1, stride 1) - Regression Head
+|-- Convolutional Layer (4 boxes * 1 confidence score, kernel size 1x1, stride 1) - Classification Head
+|-- Non-Maximum Suppression
+|
+|-- Output: Detected bounding boxes and confidence scores for the single class
