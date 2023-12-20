@@ -18,3 +18,11 @@ https://youtu.be/qUSPbHE3OeU?si=DK9V3inBgaPROrkS
 nn in pytorch
 https://youtu.be/mozBidd58VQ?si=gIQwjTIhCgLFJBTO
 
+Residual Networks and Skip Connections
+https://youtu.be/Q1JCrG1bJ-A?si=F6hFDTl8VACmhuqr
+
+DL
+https://youtube.com/playlist?list=PLgPbN3w-ia_PeT1_c5jiLW3RJdR7853b9&si=bkJVnB3I0cOhC6r6
+
+Neural Network
+https://www.youtube.com/playlist?list=PLQVvvaa0QuDcjD5BAw2DxE6OF2tius3V3
