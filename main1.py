@@ -2,32 +2,32 @@ import torch
 from torch import nn, save , load
 from torch.optim import SGD
 from torch.utils.data import DataLoader
-from torchvision import datasets
-from torchvision.transforms import ToTensor
-from torchvision.datasets import CocoDetection
-import torchvision.transforms as transforms
-
-transform = transforms.Compose([ToTensor(), transforms.Resize((16, 16),antialias=True)])
-dataset = CocoDetection(root='D:/Project_Files/custom_nn/Dataset/Detectron.v5i.coco/train', annFile='D:/Project_Files/custom_nn/Dataset/Detectron.v5i.coco/train/_annotations.coco.json', transform=transform)
-data_loader = DataLoader(dataset, batch_size=16, shuffle=True, num_workers=4)
-
-class objectdetection(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.model = nn.Sequential(
-            nn.Conv2d(1,32,(3,3)), 
-            nn.ReLU(),
-            nn.Conv2d(32,64,(3,3)),
-            nn.ReLU(),
-            nn.Conv2d(64,64,(3,3)),
-            nn.ReLU(),
-            nn.Flatten(),
-            nn.Linear(64*(28-6)*(28-6),10)
-        )
     
-    def forward(self,x):
-        return self.model(x)
-    
+class ResidualBlock1(nn.Module):
+    def __init__(self, in_channels, out_channels):
+        super(ResidualBlock1, self).__init__()
+        
+        self.conv1 = nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=1, padding=1)
+        self.bn1 = nn.BatchNorm2d(out_channels)
+        self.silu = nn.SiLU()
+        
+        self.conv2 = nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=1, padding=1)
+        self.bn2 = nn.BatchNorm2d(out_channels)
+
+    def forward(self, x):
+        residual = x
+        
+        out = self.conv1(x)
+        out = self.bn1(out)
+        out = self.silu(out)
+
+        out = self.conv2(out)
+        out = self.bn2(out)
+
+        out += residual
+       
+        return out
+
 class ResidualBlock(nn.Module):
     def __init__(self, in_channels, out_channels):
         super(ResidualBlock, self).__init__()
@@ -53,19 +53,23 @@ class ResidualBlock(nn.Module):
        
         return out
 
-clf = ResidualBlock(in_channels=64, out_channels=64).to('cuda')
+clf = ResidualBlock().to('cuda')
 optimizer = SGD(clf.parameters(), lr=0.001, momentum=0.9)
 loss_function = nn.SmoothL1Loss()
 
 if __name__  == "__main__":
     for epoch in range(10):
-        for batch in data_loader:
-            x,y = batch 
+        for batch in DataLoader:
+            x,y = batch # x is image and y is label
             x,y = x.to('cuda'),y.to('cuda')
             predit = clf(x)
+            # Pass the image to the layer and try to process and confirms with the actual label and give the loss 
             loss = loss_function(predit,y)
+            # Resets the gradients of the model's parameters
             optimizer.zero_grad()
+            # Backpropagates the loss through the model to compute gradients
             loss.backward()
+            # Updates the model's parameters based on the gradients
             optimizer.step()
 
         print(f"Epochs:{epoch}")
