@@ -9,7 +9,7 @@ class PotholeDataset(torch.utils.data.Dataset):
         self.root_dir = root_dir
         self.transform = transform
         self.image_paths, self.annotation_paths = self.list_paths()  # Call list_paths to initialize paths
-
+        self.class_mapping = {'label1': 1,'label2': 0}
     def __len__(self):
         return len(self.image_paths)
 
@@ -22,11 +22,19 @@ class PotholeDataset(torch.utils.data.Dataset):
 
         # Parse annotation
         annotation_tree = ET.parse(annotation_path)
+        root = annotation_tree.getroot()
         # Extract bounding box coordinates and labels from the annotation file
         # Example: Replace this with actual parsing logic
-        box_coords = [...]  # List of [xmin, ymin, xmax, ymax]
-        labels = [...]  # List of corresponding labels
-
+        box_coords = []  # List of [xmin, ymin, xmax, ymax]
+        labels = []  # List of corresponding labels
+        for obj in root.findall('.//object'):
+            bbox = obj.find('bndbox')
+            xmin = float(bbox.find('xmin').text)
+            ymin = float(bbox.find('ymin').text)
+            xmax = float(bbox.find('xmax').text)
+            ymax = float(bbox.find('ymax').text)
+            box_coords.append([xmin, ymin, xmax, ymax])
+            labels.append(self.class_mapping[obj.find('name').text])
         # Create target dictionary
         target = {'boxes': torch.tensor(box_coords, dtype=torch.float32),
                   'labels': torch.tensor(labels, dtype=torch.int64)}
@@ -41,11 +49,10 @@ class PotholeDataset(torch.utils.data.Dataset):
         image_paths, annotation_paths = [], []
         for split in ['train', 'valid', 'test']:
             split_dir = os.path.join(self.root_dir, split)
-            image_dir = os.path.join(split_dir, 'images')
-            for filename in os.listdir(image_dir):
+            for filename in os.listdir(split_dir):
                 if filename.endswith('.jpg'):
-                    image_path = os.path.join(split, 'images', filename)
-                    annotation_path = os.path.join(split, 'annotations', filename.replace('.jpg', '.xml'))
+                    image_path = os.path.join(split, filename)
+                    annotation_path = os.path.join(split, filename.replace('.jpg', '.xml'))
                     image_paths.append(image_path)
                     annotation_paths.append(annotation_path)
         return image_paths, annotation_paths
@@ -62,7 +69,7 @@ def collate_fn(batch):
     return images, targets
 
 # Replace with actual image and annotation paths
-dataset = PotholeDataset(root_dir='Dataset/pothole_dataset', transform=transform)
+dataset = PotholeDataset(root_dir='D:\Project_Files\Dataset', transform=transform)
 dataloader = torch.utils.data.DataLoader(dataset, batch_size=4, shuffle=True, collate_fn=collate_fn)
 
 import matplotlib.pyplot as plt
