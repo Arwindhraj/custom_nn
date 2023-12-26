@@ -26,15 +26,15 @@ class CustomCOCODataset(Dataset):
         ann_ids = self.coco.getAnnIds(imgIds=img_id)
         annotations = self.coco.loadAnns(ann_ids)
 
-        # Process annotations
         boxes = [ann['bbox'] for ann in annotations]
         labels = [ann['category_id'] for ann in annotations]
-        
-        # Pad bounding boxes to a fixed size
-        max_num_boxes = 4
+        max_num_boxes = 4 
+
+        # Pad boxes and labels to max_num_boxes
         while len(boxes) < max_num_boxes:
-            boxes.append([0, 0, 0, 0])  # You can adjust this padding as needed
-        # Convert to tensor
+            boxes.append([0, 0, 0, 0])  # Append zeros
+            labels.append(0)  # Append zeros
+
         boxes = torch.tensor(boxes, dtype=torch.float32)
         labels = torch.tensor(labels, dtype=torch.int64)
 
