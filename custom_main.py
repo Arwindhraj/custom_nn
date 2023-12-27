@@ -3,13 +3,14 @@ import pandas as pd
 import torch
 from torch import nn
 from torch.optim import SGD
+import torch.nn.functional as F
 from torchvision.io import read_image
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import StepLR
 
 class MyArch(nn.Module):
-    def __init__(self):
+    def __init__(self,num_classes=3):
         super(MyArch, self).__init__()
         
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
@@ -48,13 +49,16 @@ class MyArch(nn.Module):
         self.bn9 = nn.BatchNorm2d(1024)
         self.silu9 = nn.SiLU()
 
-        self.conv10 = nn.Conv2d(1024,1024,kernel_size=3)
+        self.conv10 = nn.Conv2d(1024,1024,kernel_size=3,padding=6)
         self.bn10 = nn.BatchNorm2d(1024)
         self.silu10 = nn.SiLU()
+
+        self.conv11 = nn.Conv2d(1024,num_classes,kernel_size=3)
+        self.bn11 = nn.BatchNorm2d(1024)
+        self.silu11 = nn.SiLU()
         
     def forward(self, x):
-        input = x
-        
+
         x1 = self.silu1(self.bn1(self.conv1(x)))
         x2 = self.silu2(self.bn2(self.conv2(x1)))
         x2 += x1
@@ -73,8 +77,12 @@ class MyArch(nn.Module):
         x9 = self.silu9(self.bn9(self.conv9(x8)))
         x9 += x8
         x10 = self.silu10(self.bn10(self.conv10(x9)))
+        x10 += x9
+        x11 = self.silu11(self.bn11(self.conv11(x10)))
 
-        return x10
+        x11 = torch.mean(x11, dim=[2, 3])
+        x11 = F.softmax(x11, dim=1)
+        return x11
     
 class CustomImageDataset(Dataset):
     def __init__(self, annotation_file, img_dir, transform=None, target_transform=None):
@@ -88,7 +96,7 @@ class CustomImageDataset(Dataset):
     
     def __getitem__(self, idx):
         img_path = os.path.join(self.img_dir,self.img_labels.iloc[idx,0])
-        image = read_image(img_path)
+        image = read_image(img_path).float()
         label1 = self.img_labels.iloc[idx,1]
         label2 = self.img_labels.iloc[idx,2]
         label3 = self.img_labels.iloc[idx,3]
@@ -104,31 +112,35 @@ class CustomImageDataset(Dataset):
 def train_loop(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     model.train()
-    for batch, (X, y) in enumerate(dataloader):
-        
-        pred = model(X)
-        loss = loss_fn(pred, y)
-
+    for batch, (images, label1, label2, label3) in enumerate(dataloader):
+        y = torch.stack([label1, label2, label3], dim=1)
+        images, y = images.to(device), y.to(device)
+        optimizer.zero_grad()
+        pred = model(images)
+        loss = loss_fn(pred,y)
         loss.backward()
         optimizer.step()
-        optimizer.zero_grad()
 
         if batch % 100 == 0:
-            loss, current = loss.item(), (batch + 1) * len(X)
+            loss, current = loss.item(), (batch + 1) * len(images)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 if __name__ == "__main__":
 
     training_data = CustomImageDataset(annotation_file='Dataset/train/_classes.csv', img_dir='Dataset/train/', transform=None)
 
-    train_dataloader = DataLoader(training_data, batch_size=32, shuffle=True)
+    train_dataloader = DataLoader(training_data, batch_size=4, shuffle=True)
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = MyArch().to(device)
+    model = MyArch(num_classes=3).to(device)
+
+    # for name, param in model.named_parameters():
+    #     print(f"Parameter name: {name}, Parameter type: {param.dtype}")
+
+
     optimizer = SGD(model.parameters(), lr=0.001, momentum=0.9)
     scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
-    loss_function = nn.CrossEntropyLoss()
-
+    loss_function = nn.MSELoss()
 
     epochs = 5
     for t in range(epochs):
