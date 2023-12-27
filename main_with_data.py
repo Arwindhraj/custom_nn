@@ -30,13 +30,28 @@ class CustomCOCODataset(Dataset):
         labels = [ann['category_id'] for ann in annotations]
         max_num_boxes = 4 
 
-        # Pad boxes and labels to max_num_boxes
         while len(boxes) < max_num_boxes:
-            boxes.append([0, 0, 0, 0])  # Append zeros
-            labels.append(0)  # Append zeros
+            boxes.append([0, 0, 0, 0])   
+            labels.append(0)   
 
         boxes = torch.tensor(boxes, dtype=torch.float32)
+
+        if len(boxes.size()) == 1:
+            boxes = boxes.unsqueeze(0)
+
+        max_columns = max(box.size(0) for box in boxes)
+        boxes = torch.stack([torch.cat([box, torch.zeros(max_columns - box.size(0), 4)], dim=0) for box in boxes])
+
         labels = torch.tensor(labels, dtype=torch.int64)
+
+        if len(labels.size()) == 1:
+            labels = labels.unsqueeze(1)
+
+        max_columns = max(label.size(0) for label in labels)
+        labels = torch.stack([torch.cat([label, torch.zeros(max_columns - label.size(0))], dim=0) for label in labels])
+
+        if labels.size(1)!= boxes.size(1):
+            labels = torch.cat([label, torch.zeros(labels.size(0), boxes.size(1) - label.size(1))] for label in labels)
 
         targets = {
             'boxes': boxes,
