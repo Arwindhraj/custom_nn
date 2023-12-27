@@ -1,6 +1,6 @@
 import os
-import pandas as pd
 import torch
+import pandas as pd
 from torch import nn
 from torch.optim import SGD
 import torch.nn.functional as F
@@ -56,6 +56,7 @@ class MyArch(nn.Module):
         self.conv11 = nn.Conv2d(1024,num_classes,kernel_size=3)
         self.bn11 = nn.BatchNorm2d(1024)
         self.silu11 = nn.SiLU()
+        
         
     def forward(self, x):
 
@@ -137,10 +138,9 @@ if __name__ == "__main__":
     # for name, param in model.named_parameters():
     #     print(f"Parameter name: {name}, Parameter type: {param.dtype}")
 
-
     optimizer = SGD(model.parameters(), lr=0.001, momentum=0.9)
     scheduler = StepLR(optimizer, step_size=5, gamma=0.1)
-    loss_function = nn.MSELoss()
+    loss_function = nn.SmoothL1Loss()
 
     epochs = 5
     for t in range(epochs):
@@ -148,7 +148,3 @@ if __name__ == "__main__":
         train_loop(train_dataloader, model, loss_function, optimizer)
         
     print("Done!")
-
-
-
-        
