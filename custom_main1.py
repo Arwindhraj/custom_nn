@@ -45,24 +45,24 @@ class MyArch(nn.Module):
         self.bn8 = nn.BatchNorm2d(512)
         self.silu8 = nn.SiLU()
 
-        self.conv9 = nn.Conv2d(512,1024,kernel_size=3,padding=6)
+        self.conv9 = nn.Conv2d(512,num_classes,kernel_size=3,padding=6)
         self.bn9 = nn.BatchNorm2d(1024)
         self.silu9 = nn.SiLU()
 
-        self.conv10 = nn.Conv2d(1024,1024,kernel_size=3,padding=6)
-        self.bn10 = nn.BatchNorm2d(1024)
-        self.silu10 = nn.SiLU()
+        # self.conv10 = nn.Conv2d(1024,1024,kernel_size=3,padding=6)
+        # self.bn10 = nn.BatchNorm2d(1024)
+        # self.silu10 = nn.SiLU()
 
-        self.conv11 = nn.Conv2d(1024,num_classes,kernel_size=3)
-        self.bn11 = nn.BatchNorm2d(1024)
-        self.silu11 = nn.SiLU()
+        # self.conv11 = nn.Conv2d(1024,num_classes,kernel_size=3)
+        # self.bn11 = nn.BatchNorm2d(1024)
+        # self.silu11 = nn.SiLU()
         
         
     def forward(self, x):
 
         x1 = self.silu1(self.bn1(self.conv1(x)))
         x2 = self.silu2(self.bn2(self.conv2(x1)))
-        x2 += x1 
+        x2 += x1
         x3 = self.silu3(self.bn3(self.conv3(x2)))
         x3 += x2
         x4 = self.silu4(self.bn4(self.conv4(x3)))
@@ -76,14 +76,17 @@ class MyArch(nn.Module):
         x8 = self.silu8(self.bn8(self.conv8(x7)))
         x8 += x7
         x9 = self.silu9(self.bn9(self.conv9(x8)))
-        x9 += x8
-        x10 = self.silu10(self.bn10(self.conv10(x9)))
-        x10 += x9
-        x11 = self.silu11(self.bn11(self.conv11(x10)))
+        # x9 += x8
+        # x10 = self.silu10(self.bn10(self.conv10(x9)))
+        # x10 += x9
+        # x11 = self.silu11(self.bn11(self.conv11(x10)))
 
-        x11 = torch.mean(x11, dim=[2, 3])
-        x11 = F.softmax(x11, dim=1)
-        return x11
+        # x11 = torch.mean(x11, dim=[2, 3])
+        # x11 = F.softmax(x11, dim=1)
+        # return x11
+        x9 = torch.mean(x9, dim=[2, 3])
+        x9 = F.softmax(x9, dim=1)
+        return x9
     
 class CustomImageDataset(Dataset):
     def __init__(self, annotation_file, img_dir, transform=None, target_transform=None):
@@ -133,7 +136,7 @@ if __name__ == "__main__":
 
     training_data = CustomImageDataset(annotation_file='Dataset/train/_classes.csv', img_dir='Dataset/train/', transform=None)
 
-    train_dataloader = DataLoader(training_data, batch_size=4, shuffle=True)
+    train_dataloader = DataLoader(training_data, batch_size=2, shuffle=True)
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model = MyArch(num_classes=3).to(device)
