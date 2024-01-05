@@ -1,0 +1,29 @@
+CSP Bottleneck
+https://github.com/WongKinYiu/CrossStagePartialNetworks
+
+Floating Point
+https://docs.nvidia.com/cuda/floating-point/index.html
+https://github.com/jafingerhut/p4-guide/blob/master/docs/floating-point-operations.md
+
+TensorRT
+https://medium.com/@abhaychaturvedi_72055/understanding-nvidias-tensorrt-for-deep-learning-model-optimization-dad3eb6b26d9
+
+vision-transformer-from-scratch
+https://github.com/tintn/vision-transformer-from-scratch
+https://medium.com/mlearning-ai/vision-transformers-from-scratch-pytorch-a-step-by-step-guide-96c3313c2e0c
+
+Swin transformer 
+https://youtu.be/SndHALawoag?si=5k-20T68KNn0o1YK
+https://youtu.be/qUSPbHE3OeU?si=DK9V3inBgaPROrkS
+
+nn in pytorch
+https://youtu.be/mozBidd58VQ?si=gIQwjTIhCgLFJBTO
+
+Residual Networks and Skip Connections
+https://youtu.be/Q1JCrG1bJ-A?si=F6hFDTl8VACmhuqr
+
+DL
+https://youtube.com/playlist?list=PLgPbN3w-ia_PeT1_c5jiLW3RJdR7853b9&si=bkJVnB3I0cOhC6r6
+
+Neural Network
+https://www.youtube.com/playlist?list=PLQVvvaa0QuDcjD5BAw2DxE6OF2tius3V3
