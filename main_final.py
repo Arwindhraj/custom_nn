@@ -338,6 +338,7 @@ class CustomImageDataset(Dataset):
         label1 = self.img_labels.iloc[idx,1]
         label2 = self.img_labels.iloc[idx,2]
         label3 = self.img_labels.iloc[idx,3]
+        # remove the above (label1 and label2 and label3) and replace them with [x,y,w,h] coordinates
 
         if self.transform:
             image = self.transform(image)
