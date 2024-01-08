@@ -35,3 +35,10 @@ https://github.com/potterhsu/easy-fpn.pytorch
 RPN
 https://towardsmachinelearning.org/region-proposal-network/
 https://github.com/rbgirshick/py-faster-rcnn
+https://www.youtube.com/watch?v=X3IlbjQs190
+
+SGD
+https://youtu.be/qyGPheuLMYc?si=fw2VWIX7XClc28rN
+
+PyTorch DataLoader
+https://medium.com/fullstackai/how-to-train-an-object-detector-with-your-own-coco-dataset-in-pytorch-319e7090da5
