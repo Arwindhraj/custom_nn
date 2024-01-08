@@ -3,6 +3,7 @@ from torch import nn
 
 
 # Activation functions
+
 class SiLU(nn.Module):
     # SiLU activation https://arxiv.org/pdf/1606.08415.pdf
     @staticmethod
