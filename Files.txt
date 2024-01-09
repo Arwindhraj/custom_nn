@@ -31,4 +31,20 @@ https://www.youtube.com/playlist?list=PLQVvvaa0QuDcjD5BAw2DxE6OF2tius3V3
 Resnet
 https://ethereon.github.io/netscope/#/gist/db945b393d40bfa26006
 
+<<<<<<< Updated upstream:Files.txt
 Anchor box 
+=======
+RPN
+https://towardsmachinelearning.org/region-proposal-network/
+https://github.com/rbgirshick/py-faster-rcnn
+https://www.youtube.com/watch?v=X3IlbjQs190
+
+SGD
+https://youtu.be/qyGPheuLMYc?si=fw2VWIX7XClc28rN
+
+PyTorch DataLoader
+https://medium.com/fullstackai/how-to-train-an-object-detector-with-your-own-coco-dataset-in-pytorch-319e7090da5
+
+BBox and RPN
+https://chat.openai.com/share/eae7e45e-ed84-48cc-a03c-f18cace6264d
+>>>>>>> Stashed changes:Doc/Files.txt
