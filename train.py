@@ -4,17 +4,23 @@ import pandas as pd
 from PIL import Image
 from torch.optim import SGD
 from torch import nn
-from torch.utils.data import Dataset
+from torch.utils.data import ConcatDataset, Dataset
 from torch.utils.data import DataLoader
 from components import MyArchitecture
 import torchvision.transforms as transforms
 from torch.optim.lr_scheduler import StepLR
 
 class CocoFormatDataset(Dataset):
-    def __init__(self,
+    def __init__(self, root, filename, label):
+        self.root = root
+        self.filename = filename
+        self.label = label
 
+    def __len__(self):
+        return len(self.filename)
 
-
+    def __getitem__(self):
+        pass
 
 class CustomImageDatasetExample(Dataset):
     def __init__(self, annotation_file, img_dir, transform=None, target_transform=None):
